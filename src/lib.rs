@@ -6,7 +6,7 @@ mod builder;
 mod app;
 mod font;
 
-pub use winit::event::VirtualKeyCode;
+pub use winit::event::ButtonId;
 
 pub use crate::app::AppBuilder;
 
@@ -45,12 +45,12 @@ pub fn text(string: &str, position: [i32; 2], size: i32, color: [f32; 4]) {
     }
 }
 
-pub fn key_pressed(key: VirtualKeyCode) -> bool {
+pub fn key_pressed(key: ButtonId) -> bool {
     app::get_app().pressed_keys().contains(&key)
 }
-pub fn key_press(key: VirtualKeyCode) -> bool {
+pub fn key_press(key: ButtonId) -> bool {
     app::get_app().key_presses().contains(&key)
 }
-pub fn key_event(key: VirtualKeyCode) -> bool {
+pub fn key_event(key: ButtonId) -> bool {
     app::get_app().key_events().contains(&key)
 }
