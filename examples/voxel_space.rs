@@ -1,6 +1,5 @@
-extern crate blithaven_rewrite;
-use blithaven_rewrite::*;
-use image::{io::Reader as ImageReader, GenericImageView};
+use blithaven::*;
+use image::io::Reader as ImageReader;
 
 fn main() {
   let test = ImageReader::open("src/assets/D5.png").unwrap();
@@ -12,7 +11,7 @@ fn main() {
 
   let play_pos = [74,74];
   
-  AppBuilder::new().set_size(500, 400).run(move | delta | {
+  AppBuilder::new().set_size(500, 400).run(move | _delta | {
     
     for i in (0..20).rev() {
       let line_width = 500 / (i + 1);

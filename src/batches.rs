@@ -2,7 +2,7 @@
 
 use glium::texture::SrgbTexture2d;
 use glium::{Blend, Frame, IndexBuffer, Surface, VertexBuffer};
-use glium::{glutin::surface::WindowSurface, Display, Program};
+use glium::{Display, Program};
 
 use crate::{vertex::Vertex, shaders};
 
@@ -21,7 +21,7 @@ impl Batch {
 	pub fn indecies(&mut self) -> &mut Vec<u32> {
 		&mut self.indecies
 	}
-	pub fn new(facade: &Display<WindowSurface>) -> Self {
+	pub fn new(facade: &Display<>) -> Self {
 		let vertecies = vec![];
 		let indecies = vec![];
 
@@ -39,7 +39,7 @@ impl Batch {
 		}
 	}
 
-	pub fn draw(&mut self, display: &Display<WindowSurface>, target: &mut Frame, aspect_ratio: f32) {
+	pub fn draw(&mut self, display: &Display<>, target: &mut Frame, aspect_ratio: f32) {
 		let uniforms = glium::uniform! {
 			matrix: [
 				[aspect_ratio,0.0,0.0,0.0],
@@ -99,7 +99,7 @@ impl TextureBatch {
 	pub fn texture(&self) -> &glium::texture::SrgbTexture2d {
 		&self.texture
 	}
-	pub fn new(facade: &Display<WindowSurface>, path_or_char: String) -> Option<Self>  {
+	pub fn new(facade: &Display<>, path_or_char: String) -> Option<Self>  {
 		let last_five = {
 			let mut split_pos: usize = 0;
 			if path_or_char.len() >= 4 {
@@ -151,7 +151,7 @@ impl TextureBatch {
 		}
 
 	}
-	fn from_texture(facade: &Display<WindowSurface>, texture: SrgbTexture2d, path: String) -> Self {
+	fn from_texture(facade: &Display<>, texture: SrgbTexture2d, path: String) -> Self {
 		let vertecies = vec![];
 		let indecies = vec![];
 
@@ -171,7 +171,7 @@ impl TextureBatch {
 		}
 	}
 
-  pub fn draw(&mut self, display: &Display<WindowSurface>, target: &mut Frame, aspect_ratio: f32) {
+  pub fn draw(&mut self, display: &Display<>, target: &mut Frame, aspect_ratio: f32) {
 		let behavior = glium::uniforms::SamplerBehavior {
             minify_filter: glium::uniforms::MinifySamplerFilter::Linear,
             magnify_filter: glium::uniforms::MagnifySamplerFilter::Nearest,
@@ -217,7 +217,7 @@ impl TextureBatch {
 	}
 }
 
-fn new_texture(path: &str, display: &Display<WindowSurface>) -> glium::texture::SrgbTexture2d {
+fn new_texture(path: &str, display: &Display<>) -> glium::texture::SrgbTexture2d {
 	use std::fs::File;
 	use std::io::Read;
 	let f = File::open(path).unwrap();

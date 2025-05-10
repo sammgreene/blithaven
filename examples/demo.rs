@@ -7,7 +7,7 @@ fn main() {
     let mut yv = 500;
     AppBuilder::new()
         .set_size(2000, 1100)
-       .run(move | delta | {
+        .run(move | delta | {
 
             text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                 labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco

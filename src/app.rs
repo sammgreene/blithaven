@@ -1,23 +1,23 @@
 use std::collections::HashSet;
 
-use glium::{backend::glutin::SimpleWindowBuilder, Surface};
-use winit::event::{ElementState, VirtualKeyCode};
-use winit::event_loop::{ControlFlow, EventLoop};
-use winit::{event::{Event, WindowEvent}, window::WindowBuilder};
+use glium::{glutin::dpi::PhysicalSize, *};
+use glutin::window::*;
+use glutin::event_loop::*;
+use glutin::event::*;
 
 use crate::{batches::*, state::State_, vertex::Vertex};
 
 pub struct AppBuilder {
-  window_builder: SimpleWindowBuilder
+  window_builder: WindowBuilder
 }
 impl AppBuilder {
 	pub fn new() -> Self {
-		Self { window_builder: SimpleWindowBuilder::new().set_window_builder(WindowBuilder::new().with_resizable(false)) }
+		Self { window_builder: WindowBuilder::new().with_resizable(false) }
 	}
 	pub fn set_size(self, width: u32, height: u32) -> Self {
-		Self { window_builder: self.window_builder.with_inner_size(width, height) }
+		Self { window_builder: self.window_builder.with_inner_size(PhysicalSize::new(width, height)) }
 	}
-	pub fn run<F>(self, mut input_code: F) ->! where F: 'static + FnMut(f64) {
+	pub fn run<F>(self, mut input_code: F) ->() where F: 'static + FnMut(f64) {
 		let event_loop = EventLoop::new();
 		//let mut app = App_::new(self.window_builder, &event_loop);
 		crate::app::init_app(self.window_builder, &event_loop);
@@ -101,7 +101,7 @@ impl App_ {
 	pub fn key_events(&self) -> HashSet<VirtualKeyCode> {
 		self.key_events.clone()
 	}
-	fn new(window_builder: SimpleWindowBuilder, event_loop: &EventLoop<()>) -> Self {
+	fn new(window_builder: WindowBuilder, event_loop: &EventLoop<()>) -> Self {
 		let state = State_::new(window_builder, event_loop);
 		Self { state, batches: vec![], texture_batches: vec![], quad_count: 0, pressed_keys: HashSet::new(), key_events: HashSet::new(), key_presses: HashSet::new(), key_releases: HashSet::new() }
 	}
@@ -229,5 +229,5 @@ impl App_ {
 }
 
 pub static mut APP: Option<App_> = None;
-pub fn init_app(window_builder: SimpleWindowBuilder, event_loop: &EventLoop<()>) { unsafe { APP= Some(App_::new(window_builder, &event_loop)) } }
+pub fn init_app(window_builder: WindowBuilder, event_loop: &EventLoop<()>) { unsafe { APP= Some(App_::new(window_builder, &event_loop)) } }
 pub fn get_app() -> &'static mut App_ { unsafe { APP.as_mut().unwrap() } }
