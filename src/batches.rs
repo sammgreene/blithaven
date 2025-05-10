@@ -172,11 +172,13 @@ impl TextureBatch {
 	}
 
   pub fn draw(&mut self, display: &Display<>, target: &mut Frame, aspect_ratio: f32) {
+
 		let behavior = glium::uniforms::SamplerBehavior {
             minify_filter: glium::uniforms::MinifySamplerFilter::Linear,
             magnify_filter: glium::uniforms::MagnifySamplerFilter::Nearest,
             ..Default::default()
-        };
+    };
+
 		let uniforms = glium::uniform! {
 			matrix: [
 				[aspect_ratio,0.0,0.0,0.0],
@@ -186,6 +188,7 @@ impl TextureBatch {
 			],
             tex: glium::uniforms::Sampler(&self.texture, behavior),
 		};
+
 		let params = glium::DrawParameters {
 			// depth: glium::Depth {
 			//     test: glium::draw_parameters::DepthTest::IfLessOrEqual,
@@ -195,23 +198,25 @@ impl TextureBatch {
 			blend: Blend::alpha_blending(),
 			.. Default::default()
 		};
+		
 		let vertex_buffer = VertexBuffer::new(display, &self.vertecies).unwrap();
 		let index_buffer = IndexBuffer::new(
 			display,
 			glium::index::PrimitiveType::TrianglesList,
-			&self.indecies).unwrap();
-
-		for i in 0 .. self.vertecies.len() / 4 {
-			println!("{:?} - z: {:?}", self.path, self.vertecies[i * 4].position[2]);
-		}
-
-
+			&self.indecies
+		).unwrap();
+	
+		// should really only be called on the very first frame or something. This just spams and is hard to read
+		// for i in 0 .. self.vertecies.len() / 4 {
+		// 	println!("{:?} - z: {:?}", self.path, self.vertecies[i * 4].position[2]);
+		// }
 		target.draw(&vertex_buffer, &index_buffer, &self.program, &uniforms,
-					&params).unwrap();
-
+					&params
+		).unwrap();
+		
 		self.vertecies = vec![];
 		self.indecies = vec![];
-  	}
+  }
 	pub fn is_full(&self) -> bool {
 		self.vertecies.len() >= self.max_quads * 4
 	}
